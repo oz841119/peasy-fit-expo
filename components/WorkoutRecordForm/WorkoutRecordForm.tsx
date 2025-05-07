@@ -39,7 +39,9 @@ export const WorkoutRecordForm = () => {
         <DatePickerInput
           label="Date"
           date={field.value}
-          onDateChange={(date) => field.onChange(date)}
+          onDateChange={(date) => {
+            field.onChange(date)
+          }}
         />
       )}
     />

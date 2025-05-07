@@ -1,7 +1,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from "date-fns";
 import React, { ComponentProps, Fragment, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Button, Modal, TouchableOpacity, View } from "react-native";
 import { BaseInput } from "../BaseInput/BaseInput";
 interface DatePickerInputProps extends ComponentProps<typeof BaseInput> {
   date: Date;
@@ -9,6 +9,7 @@ interface DatePickerInputProps extends ComponentProps<typeof BaseInput> {
 }
 export const DatePickerInput = (props: DatePickerInputProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState(new Date());
   return (
     <Fragment>
       <TouchableOpacity onPress={() => setIsOpen(true)}>
@@ -18,17 +19,21 @@ export const DatePickerInput = (props: DatePickerInputProps) => {
           value={format(props.date, 'yyyy/MM/dd HH:mm:ss')}
         />
       </TouchableOpacity>
-      {isOpen && <DateTimePicker
-        value={props.date}
-        mode="datetime"
-        display="default"
-        onChange={(event, date) => {  
-          if (date) {
-            props.onDateChange(date)
-            setIsOpen(false)
-          }
-        }}
-      />}
+      <Modal visible={isOpen} animationType="slide">
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <DateTimePicker
+            value={props.date}
+            mode="datetime"
+            display="spinner"
+            onChange={(event, date) => {  
+              if (date) {
+                props.onDateChange(date)
+              }
+            }}
+          />
+          <Button title="test" onPress={() => setIsOpen(false)} />
+        </View>
+      </Modal>
     </Fragment>
   )
 }
